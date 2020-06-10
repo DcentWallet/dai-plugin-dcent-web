@@ -1,5 +1,6 @@
 import { LocalService } from '@makerdao/services-core';
 import DcentHookedWalletSubprovider from '../provider/DcentHookedWalletSubprovider';
+import LOG from './../utils/log';
 
 export default class DcentService extends LocalService {
   constructor(name = 'dcent') {
@@ -10,7 +11,7 @@ export default class DcentService extends LocalService {
   initialize(settings) {
     const dService = this;
     this.get('accounts').addAccountType('dcent', async settings => {
-      console.log('dcent addAccountType Settings', settings);
+      LOG('dcent addAccountType Settings', settings);
       const subProvider = new DcentHookedWalletSubprovider({
         networkId: dService.get('web3').networkId()
       });
@@ -23,7 +24,7 @@ export default class DcentService extends LocalService {
           );
         }
         const addresses = await subProvider.getAccounts();
-        console.log('dcent factory addresses: ', addresses);
+        LOG('dcent factory addresses: ', addresses);
 
         address = await new Promise((resolve, reject) => {
           // this chooser function allows the app using the plugin to display the
@@ -32,7 +33,7 @@ export default class DcentService extends LocalService {
             err ? reject(err) : resolve(address);
           });
         });
-        console.log('dcent factory address: ', address);
+        LOG('dcent factory address: ', address);
         // subProvider.setChosenAddress(address);
       } else {
         address = await subProvider.getAccounts()[0];

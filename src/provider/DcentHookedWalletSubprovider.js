@@ -1,5 +1,6 @@
 import HookedWallet from 'web3-provider-engine/subproviders/hooked-wallet';
 import DcentConnector from 'dcent-web-connector';
+import LOG from './../utils/log';
 
 const pathMap = {};
 let networkId;
@@ -54,9 +55,9 @@ const getAccountsAsync = async () => {
 
   // 계정 목록 가져옴
   const accountResult = await DcentConnector.getAccountInfo();
-  console.log('dcent accountInfo result: ', accountResult);
+  LOG('dcent accountInfo result: ', accountResult);
   const accounts = accountResult.body.parameter.account;
-  console.log('dcent accounts: ', accounts);
+  LOG('dcent accounts: ', accounts);
 
   // ethereum 계정들의 path 가져옴
   const etherAccounts = accounts.filter(
@@ -66,7 +67,7 @@ const getAccountsAsync = async () => {
   etherAccounts.forEach(accountInfo => {
     paths.push(accountInfo.address_path);
   });
-  console.log('dcent ethereum path: ', paths);
+  LOG('dcent ethereum path: ', paths);
   if (paths.length === 0) {
     paths.push("m/44'/60'/0'/0/0");
     console.warn(
@@ -84,7 +85,7 @@ const getAccountsAsync = async () => {
     pathMap[addressResult.body.parameter.address] = path;
     addresses.push(addressResult.body.parameter.address);
   }
-  console.log('dcent addresses: ', addresses);
+  LOG('dcent addresses: ', addresses);
 
   DcentConnector.popupWindowClose();
 
@@ -120,12 +121,12 @@ const signTransactionAsync = async txData => {
   await openPopup();
   await waitConnectWallet();
 
-  console.log('dcent signTransactionAsync txData: ', txData);
-  console.log('dcent signTransactionAsync pathMap: ', pathMap);
+  LOG('dcent signTransactionAsync txData: ', txData);
+  LOG('dcent signTransactionAsync pathMap: ', pathMap);
   const path = await getPath(txData.from);
   if (!path) throw new Error(`address unknown '${txData.from}'`);
-  console.log('dcent signTransactionAsync path: ', path);
-  console.log('dcent signTransactionAsync networkId: ', networkId);
+  LOG('dcent signTransactionAsync path: ', path);
+  LOG('dcent signTransactionAsync networkId: ', networkId);
   let txResult;
   try {
     txResult = await DcentConnector.getEthereumSignedTransaction(
@@ -152,7 +153,7 @@ const signTransactionAsync = async txData => {
     DcentConnector.popupWindowClose();
   }
 
-  console.log('dcent signTransaction tx: ', txResult);
+  LOG('dcent signTransaction tx: ', txResult);
   return '0x' + txResult.body.parameter.signed;
 };
 
@@ -179,7 +180,7 @@ const signPersonalMessageAsync = async msgData => {
   await openPopup();
   await waitConnectWallet();
 
-  console.log('dcent signPersonalMessageAsync msgData= ', msgData);
+  LOG('dcent signPersonalMessageAsync msgData= ', msgData);
   const path = await getPath(msgData.from);
   if (!path) throw new Error(`address unknown '${msgData.from}'`);
   let txResult;
@@ -200,7 +201,7 @@ const signPersonalMessageAsync = async msgData => {
     DcentConnector.popupWindowClose();
   }
 
-  console.log('dcent signPersonalMessageAsync result: ', txResult);
+  LOG('dcent signPersonalMessageAsync result: ', txResult);
   return '0x' + txResult.body.parameter.sign;
 };
 
@@ -211,10 +212,7 @@ export default class DcentHookedWalletSubprovider extends HookedWallet {
       signPersonalMessage
     };
     const options = Object.assign(opts, extOpts);
-    console.log(
-      'dcent DcentHookedWalletSubprovider constructor options: ',
-      options
-    );
+    LOG('dcent DcentHookedWalletSubprovider constructor options: ', options);
 
     networkId = opts.networkId;
     super(options);
