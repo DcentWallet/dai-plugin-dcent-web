@@ -17,7 +17,6 @@
     }
   },
   "rules": {
-    "babel-runtime": "^6.26.0", 
     "no-console": "off",
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single", { "avoidEscape": true }],
