@@ -23,7 +23,7 @@ const openPopup = async () => {
   return popupResult;
 };
 
-// SDK Bridge 팝업창에서 wallet이 정상적으로 연결될때까지 대기합니다.
+// D'CENT Bridge Service window appears and wait for the device to connect.
 const waitConnectWallet = async () => {
   if (!DcentConnector.popupWindow || DcentConnector.popupWindow.closed) {
     throw new Error('popup_closed');
@@ -46,20 +46,20 @@ const waitConnectWallet = async () => {
 
 const getAccountsAsync = async () => {
   if (Object.keys(pathMap).length > 0) {
-    // pathMap 을 가지고 있다면
+    // If has 'pathMap'
     return Object.keys(pathMap);
   }
 
   await openPopup();
   await waitConnectWallet();
 
-  // 계정 목록 가져옴
+  // Get all accounts list
   const accountResult = await DcentConnector.getAccountInfo();
   LOG('dcent accountInfo result: ', accountResult);
   const accounts = accountResult.body.parameter.account;
   LOG('dcent accounts: ', accounts);
 
-  // ethereum 계정들의 path 가져옴
+  // Get only ethereum accounts
   const etherAccounts = accounts.filter(
     accountInfo => accountInfo.coin_name === DcentConnector.coinGroup.ETHEREUM
   );
@@ -68,6 +68,7 @@ const getAccountsAsync = async () => {
     paths.push(accountInfo.address_path);
   });
   LOG('dcent ethereum path: ', paths);
+  // There is no account
   if (paths.length === 0) {
     paths.push("m/44'/60'/0'/0/0");
     console.warn(
@@ -75,7 +76,7 @@ const getAccountsAsync = async () => {
     );
   }
 
-  // path 를 통해 계정 주소를 가져옴
+  // get address with BIP32 path
   const addresses = [];
   for (const path of paths) {
     const addressResult = await DcentConnector.getAddress(
