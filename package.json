@@ -1,0 +1,72 @@
+{
+  "name": "dai-plugin-dcent-web",
+  "version": "0.0.2",
+  "description": "A dai.js plugins for dcent wallet support",
+  "author": "IoTrust Co. Ltd.,",
+  "main": "dist/index.js",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-decorators": "^7.7.4",
+    "@babel/plugin-syntax-dynamic-import": "^7.7.4",
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-stage-2": "^7.0.0",
+    "@makerdao/testchain": "^0.2.12",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^10.1.0",
+    "babel-jest": "^24.8.0",
+    "babel-loader": "^8.0.6",
+    "babel-preset-env": "^1.7.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.5",
+    "eslint": "^5.15.1",
+    "eslint-plugin-react": "^7.20.0",
+    "husky": "^0.14.3",
+    "jest": "^24.5.0",
+    "lint-staged": "^7.1.0",
+    "prettier": "^1.12.1",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "@makerdao/currency": "^0.9.5",
+    "@makerdao/dai": "^0.23.0-rc.1",
+    "@makerdao/services-core": "^0.9.9",
+    "dcent-web-connector": "^0.8.2",
+    "web3-provider-engine": "^15.0.4"
+  },
+  "lint-staged": {
+    "*.{js,json}": [
+      "prettier --write --single-quote",
+      "git add"
+    ]
+  },
+  "scripts": {
+    "testchain": "./scripts/run-testchain.sh -s default -u",
+    "precommit": "lint-staged",
+    "build": "webpack --config webpack.config.js --mode production",
+    "build-dev": "webpack --config webpack.config.js --mode development",
+    "lint": "eslint --ext .js src ",
+    "lint:fix": "eslint --ext .js src --fix"
+  },
+  "keywords": [
+    "D'CENT",
+    "dcent",
+    "hardware wallet",
+    "D'CENT biometric wallet",
+    "dcentwallet",
+    "web provider engine",
+    "dcent web connector",
+    "MakerDAO",
+    "dai plugin",
+    "dai-plugin"
+  ],
+  "homepage": "https://github.com/DcentWallet/dai-plugin-dcent-web#readme",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ]
+}
